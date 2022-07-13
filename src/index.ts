@@ -16,6 +16,7 @@ function preserveTagAndConvertContents(h, node) {
 const processor = unified()
   .use(parse)
   .use(fixGoogleHtml)
+  // @ts-ignore
   .use(rehype2remarkWithSpaces, {
     handlers: {
       // Preserve sup/sub markup; most Markdowns have no markup for it.
@@ -23,12 +24,14 @@ const processor = unified()
       sup: preserveTagAndConvertContents,
     },
   })
+  // @ts-ignore
   .use(stringify, { listItemIndent: '1' });
 
 export default function convertToMarkdown(html) {
   return processor.process(html)
     .then((result) =>
       // Ensure double line-break before headings
+      // @ts-ignore
       result.value.replace(/(\n\s+)#/g, (_, breaks) => {
         breaks = breaks.replace(/[^\n]/g, '');
         if (breaks.length < 3) {

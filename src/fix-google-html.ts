@@ -85,7 +85,7 @@ function wrapChildren(node, wrapper) {
 export function fixNestedLists(node) {
   visit(node, isList, (node, index, parent) => {
     if (isList(parent)) {
-      const previous = parent.children[index - 1];
+      const previous = parent.children[index! - 1];
       if (previous && previous.tagName === 'li') {
         previous.children.push(node);
         parent.children.splice(index, 1);
@@ -123,7 +123,7 @@ export function unInlineStyles(node) {
 
 export function removeLineBreaksBeforeBlocks(node) {
   const { children } = node;
-  for (let i = 0; i < children.length; i++) {
+  for (let i = 0; i < children.length; i += 1) {
     const child = children[i];
     if (child.tagName === 'br' && isBlock(children[i + 1])) {
       children.splice(i, 1);

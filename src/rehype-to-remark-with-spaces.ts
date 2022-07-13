@@ -7,7 +7,7 @@ import rehypeRemark from 'rehype-remark';
  * Ideally, this needs to be solved upstream in rehype-remark.
  * TODO: create a minimal test case and file a bug there!
  */
-export default function rehype2remarkWithSpaces() {
+export default function rehype2remarkWithSpaces(this: any, ...args) {
   const spaceToken = '++IAMASPACE++';
 
   function preserveInitialSpaces(node) {
@@ -33,10 +33,10 @@ export default function rehype2remarkWithSpaces() {
     }
   }
 
-  const convert = rehypeRemark.apply(this, arguments);
-  return function (tree, file) {
+  const convert = rehypeRemark.apply(this, args);
+  return function (this: any, tree, file) {
     preserveInitialSpaces(tree);
-    const markdownTree = convert.apply(this, [tree, file]);
+    const markdownTree = convert!.apply(this, [tree, file, undefined as any]);
     recreateSpaces(markdownTree);
     return markdownTree;
   };
