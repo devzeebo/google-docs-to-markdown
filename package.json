@@ -24,6 +24,7 @@
   ],
   "scripts": {
     "build": "mkdir -p lib && tsc",
+    "install": "npm run build",
     "clean": "rm -rf lib/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
