@@ -11,28 +11,33 @@
     {
       "name": "Peter Law",
       "url": "https://github.com/PeterJCLaw"
+    },
+    {
+      "name": "Eric Siebeneich",
+      "url": "https://github.com/devzeebo"
     }
   ],
   "license": "BSD-3-Clause",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
-    "build": "mkdir -p dist && webpack",
-    "clean": "rm -rf dist/*",
-    "start": "mkdir -p dist && webpack serve",
+    "build": "mkdir -p lib && tsc",
+    "clean": "rm -rf lib/*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "copy-webpack-plugin": "^10.2.4",
+  "dependencies": {
     "hastscript": "^7.0.2",
     "path-browserify": "^1.0.1",
     "rehype-dom-parse": "^4.0.2",
     "rehype-remark": "^9.1.2",
-    "remark-stringify": "^7.0.4",
+    "remark-stringify": "^10.0.2",
     "unified": "^10.1.2",
-    "unist-util-visit": "^4.1.0",
-    "webpack": "^5.72.0",
-    "webpack-bundle-analyzer": "^4.5.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.8.1"
+    "unist-util-visit": "^4.1.0"
+  },
+  "devDependencies": {
+    "@react-ddd/eslint-config": "^0.2.0",
+    "typescript": "^4.7.4"
   }
 }

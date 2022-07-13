@@ -1,5 +1,3 @@
-'use strict';
-
 import { h as hast } from 'hastscript';
 import { visit } from 'unist-util-visit';
 
@@ -9,18 +7,18 @@ const blockElements = new Set([
   'aside',
   'blockquote',
   'caption',
-  'center',  // historic
+  'center', // historic
   'dd',
   'details',
   'dialog',
-  'dir',  // historic
+  'dir', // historic
   'div',
   'dl',
   'dt',
   'fieldset',
   'figcaption',
   'figure',
-  'frameset',  // historic
+  'frameset', // historic
   'footer',
   'form',
   'h1',
@@ -32,27 +30,27 @@ const blockElements = new Set([
   'header',
   'hgroup',
   'hr',
-  'isindex',  // historic
+  'isindex', // historic
   'li',
   'main',
   'menu',
   'nav',
-  'noframes',  // historic
+  'noframes', // historic
   'ol',
   'p',
   'pre',
   'section',
   'summary',
   'table',
-  'ul'
+  'ul',
 ]);
 
-const isList = node => node.tagName === 'ul' || node.tagName === 'ol';
-const isStyled = node => node.type === 'element' && node.properties.style;
-const isBlock = node => node && blockElements.has(node.tagName);
+const isList = (node) => node.tagName === 'ul' || node.tagName === 'ol';
+const isStyled = (node) => node.type === 'element' && node.properties.style;
+const isBlock = (node) => node && blockElements.has(node.tagName);
 
 // Wrap the children of `node` with the `wrapper` node.
-function wrapChildren (node, wrapper) {
+function wrapChildren(node, wrapper) {
   wrapper.children = node.children;
   node.children = [wrapper];
   return wrapper;
@@ -63,9 +61,9 @@ function wrapChildren (node, wrapper) {
  * can only have `div` and `li` children, but Google Docs has other lists as
  * direct descendents. This moves those free-floating lists into the previous
  * `li` element under the assumption that they represent subitems of it.
- * 
+ *
  * @param {RehypeNode} node Fix the tree below this node
- * 
+ *
  * @example
  * Input a tree like:
  *    <ul>
@@ -74,7 +72,7 @@ function wrapChildren (node, wrapper) {
  *        <li>A subitem!</li>
  *      </ul>
  *    </ul>
- * 
+ *
  * Output:
  *    <ul>
  *      <li>An Item!
@@ -84,7 +82,7 @@ function wrapChildren (node, wrapper) {
  *      </li>
  *    </ul>
  */
-export function fixNestedLists (node) {
+export function fixNestedLists(node) {
   visit(node, isList, (node, index, parent) => {
     if (isList(parent)) {
       const previous = parent.children[index - 1];
@@ -93,9 +91,8 @@ export function fixNestedLists (node) {
         parent.children.splice(index, 1);
         return index;
       }
-      else {
-        console.warn('No previous list item to move nested list into!');
-      }
+
+      console.warn('No previous list item to move nested list into!');
     }
   });
 }
@@ -104,12 +101,12 @@ export function fixNestedLists (node) {
  * Google Docs does italics/bolds/etc on <span>s with style attributes, but
  * rehype-remark does not pick up on those. Instead, transform them into
  * `em`, `strong`, etc. elements.
- * 
+ *
  * @param {RehypeNode} node Fix the tree below this node
  */
-export function unInlineStyles (node) {
+export function unInlineStyles(node) {
   visit(node, isStyled, (node, index, parent) => {
-    const style = node.properties.style;
+    const { style } = node.properties;
     if (/font-style:\s*italic/.test(style)) {
       wrapChildren(node, hast('em'));
     }
@@ -124,15 +121,14 @@ export function unInlineStyles (node) {
   });
 }
 
-export function removeLineBreaksBeforeBlocks (node) {
-  const children = node.children;
+export function removeLineBreaksBeforeBlocks(node) {
+  const { children } = node;
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
     if (child.tagName === 'br' && isBlock(children[i + 1])) {
       children.splice(i, 1);
       i -= 1;
-    }
-    else if (child.children) {
+    } else if (child.children) {
       removeLineBreaksBeforeBlocks(child);
     }
   }
@@ -144,7 +140,7 @@ export function removeLineBreaksBeforeBlocks (node) {
  * live HTML of Doc, as when you copy and paste it; not *exported* HTML (it
  * might apply there, too; I haven’t looked into it).
  */
-export default function fixGoogleHtml () {
+export default function fixGoogleHtml() {
   return (tree, file) => {
     unInlineStyles(tree);
     fixNestedLists(tree);
