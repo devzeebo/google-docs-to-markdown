@@ -20,7 +20,7 @@
   "license": "BSD-3-Clause",
   "main": "lib/index.js",
   "files": [
-    "lib"
+    "*"
   ],
   "scripts": {
     "build": "mkdir -p lib && tsc",
