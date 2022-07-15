@@ -32,7 +32,7 @@
   "dependencies": {
     "hastscript": "^7.0.2",
     "path-browserify": "^1.0.1",
-    "rehype-dom-parse": "^4.0.2",
+    "rehype-parse": "^8.0.4",
     "rehype-remark": "^9.1.2",
     "remark-stringify": "^10.0.2",
     "unified": "^10.1.2",

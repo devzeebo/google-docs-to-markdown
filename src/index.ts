@@ -1,4 +1,4 @@
-import parse from 'rehype-dom-parse';
+import parse from 'rehype-parse';
 import { all } from 'rehype-remark';
 import stringify from 'remark-stringify';
 import { unified } from 'unified';
